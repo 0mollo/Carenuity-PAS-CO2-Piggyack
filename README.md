@@ -60,36 +60,8 @@ Pull-ups are connected to **3V3**.
 
 ## Firmware/Example
 
-#include <Wire.h>
+[Code Example]()
 
-void setup() {
-  Serial.begin(115200);
-  Wire.begin();
-  Serial.println("I2C scan started");
-}
-
-void loop() {
-  byte error, address;
-  int count = 0;
-
-  for (address = 1; address < 127; address++) {
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
-
-    if (error == 0) {
-      Serial.print("Found device at 0x");
-      if (address < 16) Serial.print("0");
-      Serial.println(address, HEX);
-      count++;
-    }
-  }
-
-  if (count == 0) {
-    Serial.println("No I2C devices found");
-  }
-
-  delay(3000);
-}
 ## License
 
 Recommended:
