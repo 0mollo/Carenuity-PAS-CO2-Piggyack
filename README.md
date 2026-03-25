@@ -1,128 +1,95 @@
-# Carenuity-PAS-CO2-Piggyack
+# Carenuity PAS CO₂ Piggyback
 
-A Carenuity-branded piggyback PCB designed for the **Infineon XENSIV™ PAS CO₂** sensor module, with integration support for compact controller platforms such as the **ESP32-C3 Mini** ecosystem.
+Piggyback PCB for the **Infineon XENSIV™ PAS CO₂** sensor, designed for easy integration into the **Carenuity modular hardware ecosystem**.
 
-This board provides a practical and scalable hardware interface for PAS CO₂ sensing in smart embedded applications, rapid prototyping, and modular IoT product development.
+## Features
 
-
-## Overview
-
-The **PAS CO₂ Piggyback** is intended to simplify interfacing the Infineon photo-acoustic spectroscopy (PAS) CO₂ sensor with compact microcontroller boards by exposing clear signal routing, power rails, and communication pins through standardized headers.
-
-The board is developed under the **Carenuity branded ecosystem**, following a modular piggyback philosophy for reusable and scalable sensor integration.
-
-
-## Key Features
-
-- Supports **Infineon XENSIV™ PAS CO₂** sensor module
-- Designed for **modular piggyback integration**
-- Supports **I2C communication**
-- Includes provision for **pull-up resistors** on I2C lines
-- Compatible with compact embedded controller workflows
-- Suitable for prototyping, teaching, and scalable product development
+- Supports XENSIV PAS CO₂ sensor interface
+- Compact piggyback form factor
+- Breaks out key communication and control pins
+- I2C pull-up resistor support included
+- Suitable for ESP32-C3 Mini style integrations
+- Clean modular layout for prototyping and product development
 
 
-## Schematic Notes
-
-The schematic:
-
-- Header-based interconnection between the PAS CO₂ module and host controller
-- Two pull-up resistors:
-  - **R1 = 10kΩ**
-  - **R2 = 10kΩ**
-- I2C pull-ups tied to **3V3**
-- Sensor interface signals routed for straightforward external controller connection
+Used for I2C pull-up on:
+- SCL
+- SDA
 
 
-# Pinout Reference
+## Board Notes
 
-## Main Interface Signals
+- Designed as a sensor piggyback module
+- Carries Carenuity branding
+- Board revision shown: **V1.1**
+- Best treated as a **3.3V logic** interface unless otherwise confirmed in the sensor documentation
 
-| Signal | Function |
-|--------|----------|
-| TX     | UART transmit / sensor communication line |
-| RX     | UART receive / sensor communication line |
+  # Pinout
+
+## Signal List
+
+| Signal | Description |
+|--------|-------------|
+| TX     | UART transmit |
+| RX     | UART receive |
 | SCL    | I2C clock |
 | SDA    | I2C data |
-| PWM    | PWM signal output/interface |
-| PSEL   | Protocol or interface selection line |
-| INT    | Interrupt output |
-| GND    | Ground reference |
-| 3V3    | 3.3V rail |
-| 5V     | 5V rail |
+| PWM    | PWM output/interface |
+| PSEL   | Interface select |
+| INT    | Interrupt |
+| GND    | Ground |
+| 3V3    | 3.3V supply |
+| 5V     | 5V supply |
 
-## Pull-up Network
+## I2C Pull-ups
 
-| Ref | Value | Purpose |
-|-----|-------|---------|
-| R1  | 10kΩ  | I2C pull-up |
-| R2  | 10kΩ  | I2C pull-up |
+| Ref | Value |
+|-----|-------|
+| R1  | 10K   |
+| R2  | 10K   |
 
-# Hardware Overview
+Pull-ups are connected to **3V3**.
 
-The PAS CO₂ Piggyback is a dedicated adapter/interface board for the Infineon XENSIV PAS CO₂ module.
-
-## Functional Intent
-
-The board is meant to:
-
-- host or align with the PAS CO₂ sensor module
-- expose usable external connection points
-- simplify controller wiring
-- maintain consistency within the Carenuity piggyback hardware ecosystem
-
-## Interface Style
-
-The board uses dual header arrangements for signal breakout. The labeling suggests compatibility with compact embedded control boards, particularly development boards used in sensor prototyping.
-
-## Notable Design Elements
-
-- Clear signal silkscreen
-- Carenuity visual identity
-- PAS CO₂ product labeling
-- I2C pull-up resistor provision
-- Compact rectangular piggyback layout
-- Version-controlled board artwork
-
-## Integration Considerations
-
-Before deployment, verify:
-
-- logic voltage compatibility
-- actual PAS CO₂ module pin function
-- whether UART, I2C, or PWM is the intended active interface
-- power supply rail requirements
-- mechanical clearance for the mounted module
 ## Applications
 
-- Indoor air quality monitoring
-- Smart home CO₂ sensing nodes
-- Classroom and lab experiments
+- CO₂ monitoring
+- Indoor air quality systems
+- Embedded sensor development
 - IoT environmental monitoring
-- Rapid embedded prototyping
-- Modular sensor platform development
 
-## Recommended Power and Logic
+## Firmware/Example
 
-- Primary logic interface: **3.3V**
-- Check the PAS CO₂ module electrical requirements before applying **5V**
-- Confirm level compatibility between the controller and sensor interface lines
+#include <Wire.h>
 
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+  Serial.println("I2C scan started");
+}
 
+void loop() {
+  byte error, address;
+  int count = 0;
 
-## Design Philosophy
+  for (address = 1; address < 127; address++) {
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
 
-This board follows the Carenuity approach of creating:
+    if (error == 0) {
+      Serial.print("Found device at 0x");
+      if (address < 16) Serial.print("0");
+      Serial.println(address, HEX);
+      count++;
+    }
+  }
 
-- reusable modules
-- standardized sensor piggybacks
-- compact embedded hardware blocks
-- scalable learning-to-product hardware pathways
+  if (count == 0) {
+    Serial.println("No I2C devices found");
+  }
 
+  delay(3000);
+}
+## License
 
-## Revision
-
-Current visible board revision from artwork:
-
-**V1.1**
-
+Recommended:
+- **MIT** for firmware
