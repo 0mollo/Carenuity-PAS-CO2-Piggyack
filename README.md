@@ -49,7 +49,7 @@ Used for I2C pull-up on:
 
 ## Schematic layout
 
-[Schematic layout]()
+[Schematic layout](https://github.com/0mollo/Carenuity-PAS-CO2-Piggyack/blob/main/PAS%20CO2%20Sensor%20Piggyback.pdf)
 
 ## Applications
 
