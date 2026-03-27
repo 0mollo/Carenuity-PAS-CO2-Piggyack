@@ -22,7 +22,7 @@ Used for I2C pull-up on:
 
 - Designed as a sensor piggyback module
 - Carries Carenuity branding
-- Board revision shown: **V1.1**
+- Board revision: **V1.1**
 - Best treated as a **3.3V logic** interface unless otherwise confirmed in the sensor documentation
 
  ## Pinout
